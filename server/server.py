@@ -19,16 +19,13 @@ async def ingest_logs(records: List[LogRecord]):
     valid_records = []
     
     for rec in records:
-        # Re-verify checksum using the exact raw string sent from Go
         computed_hash = hashlib.sha256(rec.raw_line.encode('utf-8')).hexdigest()
         
         if computed_hash != rec.checksum:
-            # Data corruption or tampering detected during transmission
             raise HTTPException(status_code=400, detail=f"Checksum mismatch for record ID {rec.id}")
             
         valid_records.append((rec.id, rec.user, rec.action, rec.payload_size))
 
-    # Mock high-speed batch SQL inserts (e.g., await db.executemany)
     print(f"Successfully validated and prepared {len(valid_records)} records for database insertion.")
     
     return {"status": "success", "processed_count": len(valid_records)}

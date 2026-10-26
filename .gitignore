@@ -1,6 +1,8 @@
-generate_logs.py
+
 generate.py
 ingestion.py
 sequence.md
 toy_logs.csv
 __pycache__
+.env
+data/massive_logs.txt
